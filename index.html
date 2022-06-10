@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Todo</title>
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="title header__title">Todo list</h1>
+  </header>
+  <main class="main">
+    <section class="todo">
+      <div class="container">
+        <div class="todo__inner">
+          <form class="form todo__form">
+            <label class="form__label">
+              <span>Название задачи</span>
+              <input type="text" class="form__input" placeholder="Введите задачу" aria-label="Добавить название задачи">
+            </label>
+            <label class="form__label">
+              <span>Описание задачи</span>
+              <textarea class="form__textarea" id="form-textarea" placeholder="Введите описание"
+                aria-label="Добавить описание задачи"></textarea>
+            </label>
+
+            <button class="btn form__btn primary-btn" type="submit" aria-label="Добавить задачу"
+              data-err>Добавить</button>
+
+          </form>
+          <div class="todo__list">
+
+          </div>
+          <!-- <button class="btn form__btn primary-btn" type="submit" aria-label="Очистить список" data-clear>Очистить
+            все
+          </button> -->
+        </div>
+      </div>
+    </section>
+    <div class="err-modal modal">
+      <div class="modal__wrapper">
+        <div class="modal__item">
+          <p class="modal__text">Кажется вы что то пропустили! Попробуйте еще раз</p>
+          <button class="modal__btn btn primary-btn" data-modal-close>Попробовать еще</button>
+        </div>
+      </div>
+    </div>
+    <div class="edit-modal modal">
+      <div class="modal__wrapper edit-modal__wrapper">
+        <div class="modal__item edit-item">
+          <form class="form edit__form">
+            <label class="form__label">
+              <span>Название задачи</span>
+              <input type="text" class="form__input" placeholder="Введите задачу" aria-label="Добавить название задачи">
+            </label>
+            <label class="form__label">
+              <span>Описание задачи</span>
+              <textarea class="form__textarea edit-textarea" id="edit-textarea" placeholder="Введите описание"
+                aria-label="Добавить описание задачи"></textarea>
+            </label>
+
+            <button class="btn form__btn primary-btn" type="submit" aria-label="Сохранить задачу">Сохранить</button>
+
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+
+</html>
