@@ -1,48 +1,13 @@
 window.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector(".todo__form");
-  const input = form.querySelector("input[type=text]");
   const textArea = document.getElementById("form-textarea");
   const todoList = document.querySelector(".todo__list");
-  // const modal = document.querySelector(".modal");
-  // const modalWrapper = document.querySelector(".modal__wrapper");
   const editForm = document.querySelector(".edit__form");
-  console.log(editForm);
   const placeholder = `<p class="todo__placeholder">Список задач пуст ꒰ ᵕ༚ᵕ꒱</p>`;
   const taskList = JSON.parse(localStorage.getItem("taskList")) || [];
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const inputValue = input.value;
-    const areaValue = textArea.value;
-
-    if (inputValue) {
-      let task = {
-        title: inputValue,
-        description: areaValue,
-        date: new Date().toLocaleDateString(),
-      };
-
-      taskList.push(task);
-
-      renderItem(taskList);
-
-      form.reset();
-      window.localStorage.setItem("taskList", JSON.stringify(taskList));
-    }
-  });
-
-  editForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const inputValue = editForm.querySelector("input[type=text]").value;
-    console.log(inputValue);
-  });
-
-  renderItem(taskList);
-
-  function renderItem(arr) {
-    for (let task of arr) {
-      console.log(task);
-      const item = `
+  function renderItem(task) {
+    const item = `
       <div class="todo__item">
         <div class="todo__item-head">
           <a href="#" class="todo__title">${task.title}</a>
@@ -59,12 +24,69 @@ window.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
       `;
-      todoList.innerHTML += item;
-    }
+
+    todoList.innerHTML += item;
 
     if (todoList.querySelector(".todo__placeholder")) {
       todoList.querySelector(".todo__placeholder").remove();
     }
+  }
+
+  (function initSingleTask() {
+    for (task of taskList) {
+      renderItem(task);
+    }
+  })();
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = form.querySelector(".form__input");
+    const inputValue = input.value;
+    const area = document.getElementById("form-textarea");
+    const areaValue = area.value;
+
+    if (inputValue) {
+      let task = {
+        id: Date.now(),
+        title: inputValue,
+        description: areaValue,
+        date: new Date().toLocaleDateString(),
+      };
+
+      taskList.push(task);
+      renderItem(task);
+
+      form.reset();
+      window.localStorage.setItem("taskList", JSON.stringify(taskList));
+      input.classList.remove("error__input");
+    } else {
+      input.classList.add("error__input");
+    }
+  });
+
+  editForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = editForm.querySelector("input[type=text]");
+    const inputValue = input.value;
+    const area = document.getElementById("edit-textarea");
+    const areaValue = area.value;
+    if ((inputValue, areaValue)) {
+      saveTask(inputValue, areaValue);
+    }
+  });
+
+  function saveTask(title, description) {
+    const item = document.querySelector(".todo__item");
+    task = {
+      id: Date.now(),
+      title,
+      description,
+      date: new Date().toLocaleDateString(),
+    };
+
+    renderItem(task);
+    taskList.push(task);
+    localStorage.setItem("taskList", JSON.stringify(taskList));
   }
 
   function removeTodoItem() {
@@ -74,9 +96,7 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     const index = taskList.findIndex(
-      (el) =>
-        el.title ===
-        this.closest(".todo__item").querySelector(".todo__title").textContent
+      (task) => task.id === +this.closest(".todo__item").dataset.id
     );
     taskList.splice(index, 1);
     window.localStorage.setItem("taskList", JSON.stringify(taskList));
@@ -85,8 +105,9 @@ window.addEventListener("DOMContentLoaded", function () {
   class Modal {
     constructor(modalContainer, modalOpen) {
       this.modalContainer = document.querySelector(modalContainer);
-      this.modalOpen = document.querySelectorAll(modalOpen);
+      this.modalOpen = modalOpen;
       this.modalClose = document.querySelectorAll("[data-modal-close]");
+      this.globalContainer = document.querySelector(".todo__list");
       this.modalWrapper = this.modalContainer.querySelector(".modal__wrapper");
     }
 
@@ -94,7 +115,6 @@ window.addEventListener("DOMContentLoaded", function () {
       const openModal = () => {
         this.modalContainer.classList.add("modal__active");
         document.body.classList.add("locked");
-        console.log(this);
       };
 
       const closeModal = () => {
@@ -102,8 +122,12 @@ window.addEventListener("DOMContentLoaded", function () {
         document.body.classList.remove("locked");
       };
 
-      this.modalOpen.forEach((e) => {
-        e.addEventListener("click", openModal);
+      this.globalContainer.addEventListener("click", (e) => {
+        const target = e.target;
+
+        if (target.closest(this.modalOpen)) {
+          openModal();
+        }
       });
 
       this.modalClose.forEach((e) => {

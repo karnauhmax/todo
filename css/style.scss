@@ -248,7 +248,7 @@ textarea {
 
 .todo__title {
   margin-right: 25px;
-  flex: 1 1 90%;
+  flex: 0 1 50%;
   font-size: 18px;
   font-weight: 700;
   overflow: hidden;
@@ -310,7 +310,7 @@ textarea {
     justify-content: space-between;
     align-items: center;
     border-radius: 5px;
-    padding: 50px 20px;
+    padding: 40px 20px 50px 20px;
     width: 100%;
     max-width: 500px;
     min-height: 350px;
@@ -370,9 +370,13 @@ textarea {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 25px;
-  flex: 0 0 35px;
 }
 
 .edit-textarea {
   min-height: 150px;
+}
+
+.edit-modal__text {
+  font-size: 20px;
+  margin-bottom: 35px;
 }
